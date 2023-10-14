@@ -1,4 +1,4 @@
-package repository
+package contact
 
 import (
 	"context"
@@ -13,7 +13,7 @@ type ContactRepository struct {
 	logger logging.Logger
 }
 
-func NewSqliteContactRepository(db *sql.DB, logger logging.Logger) ContactRepository {
+func NewContactRepository(db *sql.DB, logger logging.Logger) ContactRepository {
 	return ContactRepository{
 		db:     db,
 		logger: logger,

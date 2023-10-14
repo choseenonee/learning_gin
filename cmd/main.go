@@ -2,8 +2,7 @@ package main
 
 import (
 	"github.com/niumandzi/nto2022/internal/config"
-	"github.com/niumandzi/nto2022/internal/contact/repository"
-	"github.com/niumandzi/nto2022/internal/contact/usecase"
+	"github.com/niumandzi/nto2022/internal/repository/contact"
 	"github.com/niumandzi/nto2022/pkg/config"
 	"github.com/niumandzi/nto2022/pkg/logging"
 	"github.com/niumandzi/nto2022/pkg/sqlitedb"
@@ -28,8 +27,8 @@ func main() {
 	}
 
 	timeoutContext := time.Duration(cfg.Timeout) * time.Second
-	contactRepo := repository.NewSqliteContactRepository(db, logger)
-	contactUseCase := usecase.NewContacUsecase(contactRepo, timeoutContext, logger)
+	contactRepo := contact.NewContactRepository(db, logger)
+	contactUseCase := contact.NewContacUsecase(contactRepo, timeoutContext, logger)
 
 	//contact, err := contactUseCase.GetContactsByType(ctx, "worker")
 	//if err != nil {

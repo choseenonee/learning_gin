@@ -1,20 +1,20 @@
-package usecase
+package contact
 
 import (
 	"context"
-	"github.com/niumandzi/nto2022/internal/domain"
+	"github.com/niumandzi/nto2022/internal/repository"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
 	"time"
 )
 
 type ContactUsecase struct {
-	contactRepo    domain.ContactRepository
+	contactRepo    repository.ContactRepository
 	contextTimeout time.Duration
 	logger         logging.Logger
 }
 
-func NewContacUsecase(contact domain.ContactRepository, timeout time.Duration, logger logging.Logger) ContactUsecase {
+func NewContacUsecase(contact repository.ContactRepository, timeout time.Duration, logger logging.Logger) ContactUsecase {
 	return ContactUsecase{
 		contactRepo:    contact,
 		contextTimeout: timeout,
