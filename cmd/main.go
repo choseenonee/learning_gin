@@ -30,8 +30,8 @@ func main() {
 	}
 
 	timeoutContext := time.Duration(timeout) * time.Second
-	contactRepo := repository.NewSqliteContactRepository(db)
-	contactUseCase := usecase.NewContacUsecase(contactRepo, timeoutContext)
+	contactRepo := repository.NewSqliteContactRepository(db, logger)
+	contactUseCase := usecase.NewContacUsecase(contactRepo, timeoutContext, logger)
 
 	//contact, err := contactUseCase.GetContactsByType(ctx, "worker")
 	//if err != nil {
