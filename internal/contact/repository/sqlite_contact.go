@@ -4,24 +4,23 @@ import (
 	"context"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/niumandzi/nto2022/internal/domain"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
 )
 
-type sqliteContactRepository struct {
+type ContactRepository struct {
 	db     *sql.DB
 	logger logging.Logger
 }
 
-func NewSqliteContactRepository(db *sql.DB, logger logging.Logger) domain.ContactRepository {
-	return &sqliteContactRepository{
+func NewSqliteContactRepository(db *sql.DB, logger logging.Logger) ContactRepository {
+	return ContactRepository{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (s sqliteContactRepository) Create(ctx context.Context, contact model.Contact) (int, error) {
+func (s ContactRepository) Create(ctx context.Context, contact model.Contact) (int, error) {
 	result, err := s.db.ExecContext(
 		ctx,
 		"INSERT INTO contact (ContactType, Name, Number, Email) VALUES (?, ?, ?, ?)",
@@ -44,7 +43,7 @@ func (s sqliteContactRepository) Create(ctx context.Context, contact model.Conta
 	return int(id), nil
 }
 
-func (s *sqliteContactRepository) Get(ctx context.Context, contactId int) (model.Contact, error) {
+func (s ContactRepository) Get(ctx context.Context, contactId int) (model.Contact, error) {
 	row := s.db.QueryRowContext(ctx, "SELECT * FROM contact WHERE id = ?", contactId)
 
 	var contact model.Contact
@@ -65,7 +64,7 @@ func (s *sqliteContactRepository) Get(ctx context.Context, contactId int) (model
 	return contact, nil
 }
 
-func (s sqliteContactRepository) GetByType(ctx context.Context, contactType string) ([]model.Contact, error) {
+func (s ContactRepository) GetByType(ctx context.Context, contactType string) ([]model.Contact, error) {
 	rows, err := s.db.QueryContext(ctx, "SELECT * FROM contact WHERE contact_type = ?", contactType)
 	if err != nil {
 		s.logger.Error(err.Error())
@@ -92,7 +91,7 @@ func (s sqliteContactRepository) GetByType(ctx context.Context, contactType stri
 	return contacts, nil
 }
 
-func (s sqliteContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) {
+func (s ContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) {
 	rows, err := s.db.QueryContext(ctx, "SELECT * FROM contact")
 	if err != nil {
 		s.logger.Error(err.Error())
@@ -119,7 +118,7 @@ func (s sqliteContactRepository) GetAll(ctx context.Context) ([]model.Contact, e
 	return contacts, nil
 }
 
-func (s sqliteContactRepository) Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
+func (s ContactRepository) Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
 	_, err := s.db.ExecContext(
 		ctx,
 		"UPDATE contact SET ContactType=?, Name=?, Number=?, Email=? WHERE Id=?",
@@ -138,7 +137,7 @@ func (s sqliteContactRepository) Update(ctx context.Context, contactId int, cont
 	return nil
 }
 
-func (s sqliteContactRepository) Delete(ctx context.Context, contactId int) error {
+func (s ContactRepository) Delete(ctx context.Context, contactId int) error {
 	_, err := s.db.ExecContext(context.Background(), `DELETE FROM contact WHERE id = ?`, contactId)
 	if err != nil {
 		s.logger.Error(err.Error())

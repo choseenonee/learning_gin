@@ -8,21 +8,21 @@ import (
 	"time"
 )
 
-type contactUsecase struct {
+type ContactUsecase struct {
 	contactRepo    domain.ContactRepository
 	contextTimeout time.Duration
 	logger         logging.Logger
 }
 
-func NewContacUsecase(contact domain.ContactRepository, timeout time.Duration, logger logging.Logger) domain.ContactUsecase {
-	return &contactUsecase{
+func NewContacUsecase(contact domain.ContactRepository, timeout time.Duration, logger logging.Logger) ContactUsecase {
+	return ContactUsecase{
 		contactRepo:    contact,
 		contextTimeout: timeout,
 		logger:         logger,
 	}
 }
 
-func (c *contactUsecase) CreateContact(ctx context.Context, contact model.Contact) (int, error) {
+func (c ContactUsecase) CreateContact(ctx context.Context, contact model.Contact) (int, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -34,7 +34,7 @@ func (c *contactUsecase) CreateContact(ctx context.Context, contact model.Contac
 	return id, nil
 }
 
-func (c *contactUsecase) GetContact(ctx context.Context, contactId int) (model.Contact, error) {
+func (c ContactUsecase) GetContact(ctx context.Context, contactId int) (model.Contact, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -46,7 +46,7 @@ func (c *contactUsecase) GetContact(ctx context.Context, contactId int) (model.C
 	return contact, nil
 }
 
-func (c *contactUsecase) GetContactsByType(ctx context.Context, contactType string) ([]model.Contact, error) {
+func (c ContactUsecase) GetContactsByType(ctx context.Context, contactType string) ([]model.Contact, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -58,7 +58,7 @@ func (c *contactUsecase) GetContactsByType(ctx context.Context, contactType stri
 	return contacts, nil
 }
 
-func (c *contactUsecase) GetAllContacts(ctx context.Context) ([]model.Contact, error) {
+func (c ContactUsecase) GetAllContacts(ctx context.Context) ([]model.Contact, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -70,7 +70,7 @@ func (c *contactUsecase) GetAllContacts(ctx context.Context) ([]model.Contact, e
 	return contacts, nil
 }
 
-func (c *contactUsecase) UpdateContact(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
+func (c ContactUsecase) UpdateContact(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -82,13 +82,12 @@ func (c *contactUsecase) UpdateContact(ctx context.Context, contactId int, conta
 	return nil
 }
 
-func (c *contactUsecase) DeleteContact(ctx context.Context, contactId int) error {
+func (c ContactUsecase) DeleteContact(ctx context.Context, contactId int) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
 	err := c.contactRepo.Delete(ctx, contactId)
 	if err != nil {
-		c.logger.Error(err.Error())
 		return err
 	}
 	return nil

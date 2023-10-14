@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/niumandzi/nto2022/internal/config"
 	"github.com/niumandzi/nto2022/internal/contact/repository"
 	"github.com/niumandzi/nto2022/internal/contact/usecase"
-	"github.com/niumandzi/nto2022/pkg/config"
 	"github.com/niumandzi/nto2022/pkg/logging"
 	"github.com/niumandzi/nto2022/pkg/sqlitedb"
 	"time"
