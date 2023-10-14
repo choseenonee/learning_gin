@@ -3,23 +3,20 @@ package main
 import (
 	"github.com/niumandzi/nto2022/internal/contact/repository"
 	"github.com/niumandzi/nto2022/internal/contact/usecase"
+	"github.com/niumandzi/nto2022/pkg/config"
 	"github.com/niumandzi/nto2022/pkg/logging"
 	"github.com/niumandzi/nto2022/pkg/sqlitedb"
 	"time"
 )
 
 func main() {
-	filePath := "./nto2022.db"
-	driverName := "sqlite3"
-	timeout := 2
-
-	//ctx := context.Background()
-
 	logging.Init()
 	logger := logging.GetLogger()
 	logger.Println("logger initialized")
 
-	db, err := sqlitedb.NewClient(driverName, filePath)
+	cfg, err := config.InitConfig()
+
+	db, err := sqlitedb.NewClient(cfg.DriverName, cfg.FilePath)
 	if err != nil {
 		logger.Fatalf(err.Error())
 	}
@@ -29,7 +26,7 @@ func main() {
 		logger.Fatalf(err.Error())
 	}
 
-	timeoutContext := time.Duration(timeout) * time.Second
+	timeoutContext := time.Duration(cfg.Timeout) * time.Second
 	contactRepo := repository.NewSqliteContactRepository(db, logger)
 	contactUseCase := usecase.NewContacUsecase(contactRepo, timeoutContext, logger)
 
