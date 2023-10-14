@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"github.com/niumandzi/nto2022/internal/contact/repository"
 	"github.com/niumandzi/nto2022/internal/contact/usecase"
 	"github.com/niumandzi/nto2022/pkg/logging"
@@ -13,8 +11,9 @@ import (
 func main() {
 	filePath := "./nto2022.db"
 	driverName := "sqlite3"
+	timeout := 2
 
-	ctx := context.Background()
+	//ctx := context.Background()
 
 	logging.Init()
 	logger := logging.GetLogger()
@@ -30,17 +29,17 @@ func main() {
 		logger.Fatalf(err.Error())
 	}
 
-	timeoutContext := time.Duration(10) * time.Second
+	timeoutContext := time.Duration(timeout) * time.Second
 	contactRepo := repository.NewSqliteContactRepository(db)
 	contactUseCase := usecase.NewContacUsecase(contactRepo, timeoutContext)
-	contact, err := contactUseCase.GetContact(ctx, 1)
-	if err != nil {
-		logger.Fatalf(err.Error())
-	}
 
-	fmt.Println("ID:", contact.Id)
-	fmt.Println("Type:", contact.ContactType)
-	fmt.Println("Name:", contact.Name)
-	fmt.Println("Number:", contact.Number)
-	fmt.Println("Email:", contact.Email)
+	//contact, err := contactUseCase.GetContactsByType(ctx, "worker")
+	//if err != nil {
+	//	logger.Fatalf(err.Error())
+	//}
+	//
+	//for _, contact := range contact {
+	//	fmt.Printf("ID: %d, Type: %s, Name: %s, Number: %s, Email: %s\n",
+	//		contact.Id, contact.ContactType, contact.Name, contact.Number, contact.Email)
+	//}
 }
