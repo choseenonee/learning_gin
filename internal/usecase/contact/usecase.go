@@ -38,7 +38,7 @@ func (c ContactUsecase) GetContact(ctx context.Context, contactId int) (model.Co
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	contact, err := c.contactRepo.Get(ctx, contactId)
+	contact, err := c.contactRepo.GetById(ctx, contactId)
 	if err != nil {
 		c.logger.Error(err.Error())
 		return model.Contact{}, err

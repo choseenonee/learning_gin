@@ -43,7 +43,7 @@ func (s ContactRepository) Create(ctx context.Context, contact model.Contact) (i
 	return int(id), nil
 }
 
-func (s ContactRepository) Get(ctx context.Context, contactId int) (model.Contact, error) {
+func (s ContactRepository) GetById(ctx context.Context, contactId int) (model.Contact, error) {
 	row := s.db.QueryRowContext(ctx, "SELECT * FROM contact WHERE id = ?", contactId)
 
 	var contact model.Contact
