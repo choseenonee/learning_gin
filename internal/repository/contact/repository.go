@@ -23,7 +23,7 @@ func NewContactRepository(db *sql.DB, logger logging.Logger) ContactRepository {
 func (s ContactRepository) Create(ctx context.Context, contact model.Contact) (int, error) {
 	result, err := s.db.ExecContext(
 		ctx,
-		"INSERT INTO contact (ContactType, Name, Number, Email) VALUES (?, ?, ?, ?)",
+		"INSERT INTO contact (contact_type, Name, Number, Email) VALUES (?, ?, ?, ?)",
 		contact.ContactType,
 		contact.Name,
 		contact.Number,
@@ -121,7 +121,7 @@ func (s ContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) 
 func (s ContactRepository) Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
 	_, err := s.db.ExecContext(
 		ctx,
-		"UPDATE contact SET ContactType=?, Name=?, Number=?, Email=? WHERE Id=?",
+		"UPDATE contact SET contact_type=?, Name=?, Number=?, Email=? WHERE Id=?",
 		contactInput.ContactType,
 		contactInput.Name,
 		contactInput.Number,
@@ -138,7 +138,7 @@ func (s ContactRepository) Update(ctx context.Context, contactId int, contactInp
 }
 
 func (s ContactRepository) Delete(ctx context.Context, contactId int) error {
-	_, err := s.db.ExecContext(context.Background(), `DELETE FROM contact WHERE id = ?`, contactId)
+	_, err := s.db.ExecContext(ctx, `DELETE FROM contact WHERE id = ?`, contactId)
 	if err != nil {
 		s.logger.Error(err.Error())
 		return err

@@ -9,8 +9,8 @@ type Contact struct {
 }
 
 type UpdateContactInput struct {
-	ContactType *string
-	Name        *string
-	Number      *string
-	Email       *string
+	ContactType string
+	Name        string
+	Number      string
+	Email       string
 }
