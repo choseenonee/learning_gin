@@ -16,7 +16,6 @@ func NewClient(driverName string, filePath string) (*sql.DB, error) {
 }
 
 func CreateTables(db *sql.DB) error {
-
 	_, err := db.Exec(
 		`CREATE TABLE IF NOT EXISTS contact (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
