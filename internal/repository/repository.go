@@ -13,10 +13,3 @@ type ContactRepository interface {
 	Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error
 	Delete(ctx context.Context, contactId int) error
 }
-
-type HotelRepository interface {
-}
-
-type Repositorys struct {
-	ContactRepository
-}
