@@ -1,15 +1,22 @@
 package main
 
 import (
+	"context"
+	"github.com/niumandzi/nto2022/gui"
 	"github.com/niumandzi/nto2022/internal/config"
 	contactRepository "github.com/niumandzi/nto2022/internal/repository/contact"
+	hotelRepository "github.com/niumandzi/nto2022/internal/repository/hotel"
+	"github.com/niumandzi/nto2022/internal/usecase"
 	contactUsecase "github.com/niumandzi/nto2022/internal/usecase/contact"
+	hotelUsecase "github.com/niumandzi/nto2022/internal/usecase/hotel"
 	"github.com/niumandzi/nto2022/pkg/logging"
 	"github.com/niumandzi/nto2022/pkg/sqlitedb"
 	"time"
 )
 
 func main() {
+	ctx := context.Background()
+
 	logging.Init()
 	logger := logging.GetLogger()
 	logger.Println("logger initialized")
@@ -27,7 +34,13 @@ func main() {
 	}
 
 	timeoutContext := time.Duration(cfg.Timeout) * time.Second
-	contactRepo := contactRepository.NewContactRepository(db, logger)
-	contactUsecase := contactUsecase.NewContacUsecase(contactRepo, timeoutContext, logger)
 
+	contactRepo := contactRepository.NewContactRepository(db, logger)
+	hotelRepo := hotelRepository.NewHotelRepository(db, logger)
+
+	contact := contactUsecase.NewContacUsecase(contactRepo, timeoutContext, logger)
+	hotel := hotelUsecase.NewHotelUsecase(hotelRepo, timeoutContext, logger)
+
+	cases := usecase.NewUsecases(contact, hotel)
+	gui.Index(ctx, cases)
 }
