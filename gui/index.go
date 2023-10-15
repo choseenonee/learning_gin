@@ -48,7 +48,7 @@ func Index(ctx context.Context, cases *usecase.UseCases) {
 	updateInput := model.UpdateContactInput{
 		ContactType: "worker",
 		Name:        "John Doe",
-		Number:      "1234567890",
+		Number:      "+7 (999) 856-23-23",
 		Email:       "john.doe@example.com",
 	}
 	err = cases.Contact.UpdateContact(ctx, 5, updateInput)
