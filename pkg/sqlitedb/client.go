@@ -27,11 +27,11 @@ func CreateTables(db *sql.DB) error {
 
 			CREATE TABLE IF NOT EXISTS hotel (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				hotel_name VARCHAR(200),
-				location VARCHAR,
-				hotel_number VARCHAR,
+				name VARCHAR(200),
+				location_id INTEGER,
+				number VARCHAR,
 				worker_id INTEGER,
-				hotel_description VARCHAR(500),
+				description VARCHAR(500),
 				FOREIGN KEY (worker_id) REFERENCES contact (id)
 			)`)
 
