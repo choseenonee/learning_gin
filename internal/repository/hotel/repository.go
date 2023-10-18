@@ -22,7 +22,7 @@ func NewHotelRepository(db *sql.DB, logger logging.Logger) HotelRepository {
 func (h HotelRepository) Create(ctx context.Context, hotel model.Hotel) (int, error) {
 	result, err := h.db.ExecContext(
 		ctx,
-		"INSERT INTO hotel (Name, LocationId, Number, WorkerId, Description) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO hotel (name, location_id, number, worker_id, description) VALUES (?, ?, ?, ?, ?)",
 		hotel.Name,
 		hotel.LocationId,
 		hotel.Number,
