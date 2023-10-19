@@ -118,7 +118,7 @@ func (s ContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) 
 	return contacts, nil
 }
 
-func (s ContactRepository) Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
+func (s ContactRepository) Update(ctx context.Context, contactInput model.Contact) error {
 	_, err := s.db.ExecContext(
 		ctx,
 		"UPDATE contact SET contact_type=?, Name=?, Number=?, Email=? WHERE Id=?",
@@ -126,7 +126,7 @@ func (s ContactRepository) Update(ctx context.Context, contactId int, contactInp
 		contactInput.Name,
 		contactInput.Number,
 		contactInput.Email,
-		contactId,
+		contactInput.Id,
 	)
 
 	if err != nil {

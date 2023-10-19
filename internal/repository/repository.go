@@ -10,7 +10,7 @@ type ContactRepository interface {
 	GetById(ctx context.Context, contactId int) (model.Contact, error)
 	GetByType(ctx context.Context, contactType string) ([]model.Contact, error)
 	GetAll(ctx context.Context) ([]model.Contact, error)
-	Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error
+	Update(ctx context.Context, contactInput model.Contact) error
 	Delete(ctx context.Context, contactId int) error
 }
 

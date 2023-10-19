@@ -10,7 +10,7 @@ type ContactUseCase interface {
 	GetContact(ctx context.Context, contactId int) (model.Contact, error)
 	GetContactsByType(ctx context.Context, contactType string) ([]model.Contact, error)
 	GetAllContacts(ctx context.Context) ([]model.Contact, error)
-	UpdateContact(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error
+	UpdateContact(ctx context.Context, contactInput model.Contact) error
 	DeleteContact(ctx context.Context, contactId int) error
 }
 
