@@ -3,6 +3,7 @@ package hotel
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
 )
@@ -113,4 +114,23 @@ func (h HotelRepository) GetAll(ctx context.Context) ([]model.HotelWithContact, 
 	}
 
 	return hotels, nil
+}
+
+func (h HotelRepository) Update(ctx context.Context, hotel model.Hotel) error {
+	res, err := h.db.ExecContext(ctx, `UPDATE hotel SET name = ?, location_id = ?, number = ?, worker_id = ?, description = ? WHERE id = ?`, hotel.Name, hotel.LocationId, hotel.Number, hotel.WorkerId, hotel.Description, hotel.Id)
+	if err != nil {
+		h.logger.Error(err.Error())
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		h.logger.Error(err.Error())
+	}
+
+	if count != 1 {
+		resErr := errors.New("updated rows counter not equals 1")
+		h.logger.Error(resErr.Error())
+	}
+
+	return nil
 }
