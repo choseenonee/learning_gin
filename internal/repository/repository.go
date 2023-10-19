@@ -16,5 +16,5 @@ type ContactRepository interface {
 
 type HotelRepository interface {
 	Create(ctx context.Context, hotel model.Hotel) (int, error)
-	GetById(ctx context.Context, hotelId int) (model.Hotel, error)
+	GetById(ctx context.Context, hotelId int) (model.HotelWithContact, error)
 }

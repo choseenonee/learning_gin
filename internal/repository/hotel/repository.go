@@ -43,10 +43,11 @@ func (h HotelRepository) Create(ctx context.Context, hotel model.Hotel) (int, er
 	return int(id), nil
 }
 
-func (h HotelRepository) GetById(ctx context.Context, hotelId int) (model.Hotel, error) {
-	row := h.db.QueryRowContext(ctx, "SELECT * FROM hotel WHERE id = ?", hotelId)
+func (h HotelRepository) GetById(ctx context.Context, hotelId int) (model.HotelWithContact, error) {
+	row := h.db.QueryRowContext(ctx, "SELECT * FROM hotel LEFT JOIN contact ON hotel.worker_id = contact.id WHERE hotel.id = ?", hotelId)
 
 	var hotel model.Hotel
+	var contact model.Contact
 
 	err := row.Scan(
 		&hotel.Id,
@@ -55,12 +56,19 @@ func (h HotelRepository) GetById(ctx context.Context, hotelId int) (model.Hotel,
 		&hotel.Number,
 		&hotel.WorkerId,
 		&hotel.Description,
+		&contact.Id,
+		&contact.ContactType,
+		&contact.Name,
+		&contact.Number,
+		&contact.Email,
 	)
 
 	if err != nil {
 		h.logger.Error(err.Error())
-		return model.Hotel{}, err
+		return model.HotelWithContact{}, err
 	}
 
-	return hotel, nil
+	hotelWithContact := model.HotelWithContact{hotel.Id, hotel.Name, hotel.LocationId, hotel.Number, contact, hotel.Description}
+
+	return hotelWithContact, nil
 }

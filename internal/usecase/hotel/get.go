@@ -5,14 +5,15 @@ import (
 	"github.com/niumandzi/nto2022/model"
 )
 
-func (h HotelUsecase) GetHotel(ctx context.Context, hotelId int) (model.Hotel, error) {
+func (h HotelUsecase) GetHotel(ctx context.Context, hotelId int) (model.HotelWithContact, error) {
 	ctx, cancel := context.WithTimeout(ctx, h.contextTimeout)
 	defer cancel()
 
-	hotel, err := h.hotelRepo.GetById(ctx, hotelId)
+	hotelWithContact, err := h.hotelRepo.GetById(ctx, hotelId)
 	if err != nil {
 		h.logger.Error(err.Error())
-		return model.Hotel{}, err
+		return model.HotelWithContact{}, err
 	}
-	return hotel, nil
+
+	return hotelWithContact, nil
 }
