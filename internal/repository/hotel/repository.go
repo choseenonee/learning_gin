@@ -72,3 +72,45 @@ func (h HotelRepository) GetById(ctx context.Context, hotelId int) (model.HotelW
 
 	return hotelWithContact, nil
 }
+
+func (h HotelRepository) GetAll(ctx context.Context) ([]model.HotelWithContact, error) {
+	rows, err := h.db.QueryContext(ctx, "SELECT * FROM hotel LEFT JOIN contact ON hotel.worker_id = contact.id")
+
+	if err != nil {
+		h.logger.Error(err.Error())
+		return []model.HotelWithContact{}, err
+	}
+	defer rows.Close()
+
+	var hotels []model.HotelWithContact
+
+	for rows.Next() {
+		var hotel model.Hotel
+		var contact model.Contact
+		var hotelWithContact model.HotelWithContact
+
+		err = rows.Scan(&hotel.Id,
+			&hotel.Name,
+			&hotel.LocationId,
+			&hotel.Number,
+			&hotel.WorkerId,
+			&hotel.Description,
+			&contact.Id,
+			&contact.ContactType,
+			&contact.Name,
+			&contact.Number,
+			&contact.Email,
+		)
+
+		if err != nil {
+			h.logger.Error(err.Error())
+			return hotels, err
+		}
+
+		hotelWithContact = model.HotelWithContact{hotel.Id, hotel.Name, hotel.LocationId, hotel.Number, contact, hotel.Description}
+
+		hotels = append(hotels, hotelWithContact)
+	}
+
+	return hotels, nil
+}
