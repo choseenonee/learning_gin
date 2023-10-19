@@ -41,3 +41,23 @@ func CreateTables(db *sql.DB) error {
 
 	return nil
 }
+
+func DropTables(db *sql.DB) error {
+	_, err := db.Exec(
+		`DROP TABLE IF EXISTS contact`,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(
+		`DROP TABLE IF EXISTS hotel`,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
