@@ -19,6 +19,7 @@ type HotelUseCase interface {
 	GetHotel(ctx context.Context, hotelId int) (model.HotelWithContact, error)
 	GetAllHotels(ctx context.Context) ([]model.HotelWithContact, error)
 	UpdateHotel(ctx context.Context, hotel model.Hotel) error
+	DeleteHotel(ctx context.Context, hotelId int) error
 }
 
 type UseCases struct {

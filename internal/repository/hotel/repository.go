@@ -125,11 +125,35 @@ func (h HotelRepository) Update(ctx context.Context, hotel model.Hotel) error {
 	count, err := res.RowsAffected()
 	if err != nil {
 		h.logger.Error(err.Error())
+		return err
 	}
 
 	if count != 1 {
-		resErr := errors.New("updated rows counter not equals 1")
+		resErr := errors.New("hotel update rows counter not equals 1")
 		h.logger.Error(resErr.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (h HotelRepository) Delete(ctx context.Context, hotelId int) error {
+	res, err := h.db.ExecContext(ctx, `DELETE FROM hotel WHERE id = ?`, hotelId)
+	if err != nil {
+		h.logger.Error(err.Error())
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		h.logger.Error(err.Error())
+		return err
+	}
+
+	if count != 1 {
+		resErr := errors.New("hotel delete rows counter not equals 1")
+		h.logger.Error(resErr.Error())
+		return err
 	}
 
 	return nil

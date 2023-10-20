@@ -19,4 +19,5 @@ type HotelRepository interface {
 	GetById(ctx context.Context, hotelId int) (model.HotelWithContact, error)
 	GetAll(ctx context.Context) ([]model.HotelWithContact, error)
 	Update(ctx context.Context, hotel model.Hotel) error
+	Delete(ctx context.Context, hotelId int) error
 }
