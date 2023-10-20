@@ -8,7 +8,7 @@ import (
 	"regexp"
 )
 
-func (c ContactUsecase) UpdateContact(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
+func (c ContactUsecase) UpdateContact(ctx context.Context, contactInput model.Contact) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -23,7 +23,7 @@ func (c ContactUsecase) UpdateContact(ctx context.Context, contactId int, contac
 		return err
 	}
 
-	err = c.contactRepo.Update(ctx, contactId, contactInput)
+	err = c.contactRepo.Update(ctx, contactInput)
 	if err != nil {
 		c.logger.Error(err.Error())
 		return err

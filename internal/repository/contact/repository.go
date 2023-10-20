@@ -3,7 +3,6 @@ package contact
 import (
 	"context"
 	"database/sql"
-	"errors"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
@@ -119,30 +118,20 @@ func (s ContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) 
 	return contacts, nil
 }
 
-func (s ContactRepository) Update(ctx context.Context, contactId int, contactInput model.UpdateContactInput) error {
-	res, err := s.db.ExecContext(
+func (s ContactRepository) Update(ctx context.Context, contactInput model.Contact) error {
+	_, err := s.db.ExecContext(
 		ctx,
 		"UPDATE contact SET contact_type=?, Name=?, Number=?, Email=? WHERE Id=?",
 		contactInput.ContactType,
 		contactInput.Name,
 		contactInput.Number,
 		contactInput.Email,
-		contactId,
+		contactInput.Id,
 	)
 
 	if err != nil {
 		s.logger.Error(err.Error())
 		return err
-	}
-
-	count, err := res.RowsAffected()
-	if err != nil {
-		s.logger.Error(err.Error())
-	}
-
-	if count != 1 {
-		resErr := errors.New("updated rows counter not equals 1")
-		s.logger.Error(resErr.Error())
 	}
 
 	return nil

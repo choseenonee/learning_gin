@@ -2,62 +2,26 @@ package gui
 
 import (
 	"context"
-	"fmt"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"github.com/niumandzi/nto2022/internal/usecase"
-	"github.com/niumandzi/nto2022/model"
+	"github.com/niumandzi/nto2022/pkg/components"
 )
 
 func Index(ctx context.Context, cases *usecase.UseCases) {
-	contactData := model.Contact{
-		ContactType: "worker",
-		Name:        "John Doe",
-		Number:      "+7 (999) 856-23-23",
-		Email:       "john.doe@example.com",
-	}
-	id, err := cases.Contact.CreateContact(ctx, contactData)
-	if err != nil {
-		println(err.Error())
-	}
-	fmt.Println(id)
+	a := app.New()
+	w := a.NewWindow("НТО2022")
+	w.SetMaster()
 
-	contact, err := cases.Contact.GetContact(ctx, 1)
-	if err != nil {
-		println(err.Error())
-	}
-	fmt.Printf("ID: %d, Type: %s, Name: %s, Number: %s, Email: %s\n",
-		contact.Id, contact.ContactType, contact.Name, contact.Number, contact.Email)
+	content := container.NewStack()
+	tutorial := container.NewBorder(nil, nil, nil, nil, content)
 
-	contactsByType, err := cases.Contact.GetContactsByType(ctx, "worker")
-	if err != nil {
-		println(err.Error())
-	}
-	for _, contactsByType := range contactsByType {
-		fmt.Printf("ID: %d, Type: %s, Name: %s, Number: %s, Email: %s\n",
-			contactsByType.Id, contactsByType.ContactType, contactsByType.Name, contactsByType.Number, contactsByType.Email)
-	}
+	split := container.NewHSplit(components.NavigationBar(content), tutorial)
 
-	contactsALL, err := cases.Contact.GetAllContacts(ctx)
-	if err != nil {
-		println(err.Error())
-	}
-	for _, contactsALL := range contactsALL {
-		fmt.Printf("ID: %d, Type: %s, Name: %s, Number: %s, Email: %s\n",
-			contactsALL.Id, contactsALL.ContactType, contactsALL.Name, contactsALL.Number, contactsALL.Email)
-	}
+	split.Offset = 0
+	w.SetContent(split)
 
-	updateInput := model.UpdateContactInput{
-		ContactType: "worker",
-		Name:        "John Doe",
-		Number:      "+7 (999) 856-23-23",
-		Email:       "john.doe@example.com",
-	}
-	err = cases.Contact.UpdateContact(ctx, 5, updateInput)
-	if err != nil {
-		println(err.Error())
-	}
-
-	err = cases.Contact.DeleteContact(ctx, id)
-	if err != nil {
-		println(err.Error())
-	}
+	w.Resize(fyne.NewSize(900, 900))
+	w.ShowAndRun()
 }
