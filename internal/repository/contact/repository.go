@@ -3,6 +3,7 @@ package contact
 import (
 	"context"
 	"database/sql"
+	"errors"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
@@ -119,7 +120,7 @@ func (s ContactRepository) GetAll(ctx context.Context) ([]model.Contact, error) 
 }
 
 func (s ContactRepository) Update(ctx context.Context, contactInput model.Contact) error {
-	_, err := s.db.ExecContext(
+	res, err := s.db.ExecContext(
 		ctx,
 		"UPDATE contact SET contact_type=?, Name=?, Number=?, Email=? WHERE Id=?",
 		contactInput.ContactType,
@@ -134,14 +135,39 @@ func (s ContactRepository) Update(ctx context.Context, contactInput model.Contac
 		return err
 	}
 
-	return nil
-}
-
-func (s ContactRepository) Delete(ctx context.Context, contactId int) error {
-	_, err := s.db.ExecContext(ctx, `DELETE FROM contact WHERE id = ?`, contactId)
+	count, err := res.RowsAffected()
 	if err != nil {
 		s.logger.Error(err.Error())
 		return err
 	}
+
+	if count != 1 {
+		resErr := errors.New("contact update rows counter not equals 1")
+		s.logger.Error(resErr.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (s ContactRepository) Delete(ctx context.Context, contactId int) error {
+	res, err := s.db.ExecContext(ctx, `DELETE FROM contact WHERE id = ?`, contactId)
+	if err != nil {
+		s.logger.Error(err.Error())
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		s.logger.Error(err.Error())
+		return err
+	}
+
+	if count != 1 {
+		resErr := errors.New("contact delete rows counter not equals 1")
+		s.logger.Error(resErr.Error())
+		return err
+	}
+
 	return nil
 }
