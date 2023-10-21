@@ -151,6 +151,7 @@ func (h HotelRepository) Delete(ctx context.Context, hotelId int) error {
 	}
 
 	if count != 1 {
+
 		resErr := errors.New("hotel delete rows counter not equals 1")
 		h.logger.Error(resErr.Error())
 		return err

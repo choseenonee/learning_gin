@@ -17,11 +17,3 @@ type HotelWithContact struct {
 	Worker      Contact
 	Description string
 }
-
-type UpdateHotelInput struct {
-	Name        string
-	LocationId  int
-	Number      string
-	WorkerId    int
-	Description string
-}
