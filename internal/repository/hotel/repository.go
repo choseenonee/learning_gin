@@ -3,7 +3,7 @@ package hotel
 import (
 	"context"
 	"database/sql"
-	"errors"
+	errcode "github.com/niumandzi/nto2022/internal/errors"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
 )
@@ -129,7 +129,7 @@ func (h HotelRepository) Update(ctx context.Context, hotel model.Hotel) error {
 	}
 
 	if count != 1 {
-		resErr := errors.New("hotel update rows counter not equals 1")
+		resErr := errcode.Wrap("update hotel", "row counter not equals 1")
 		h.logger.Error(resErr.Error())
 		return err
 	}
@@ -151,7 +151,7 @@ func (h HotelRepository) Delete(ctx context.Context, hotelId int) error {
 	}
 
 	if count != 1 {
-		resErr := errors.New("hotel delete rows counter not equals 1")
+		resErr := errcode.Wrap("delete hotel", "row counter not equals 1")
 		h.logger.Error(resErr.Error())
 		return err
 	}

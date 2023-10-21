@@ -3,8 +3,8 @@ package contact
 import (
 	"context"
 	"database/sql"
-	"errors"
 	_ "github.com/mattn/go-sqlite3"
+	errcode "github.com/niumandzi/nto2022/internal/errors"
 	"github.com/niumandzi/nto2022/model"
 	"github.com/niumandzi/nto2022/pkg/logging"
 )
@@ -142,7 +142,7 @@ func (s ContactRepository) Update(ctx context.Context, contactInput model.Contac
 	}
 
 	if count != 1 {
-		resErr := errors.New("contact update rows counter not equals 1")
+		resErr := errcode.Wrap("update contact", "row counter not equals 1")
 		s.logger.Error(resErr.Error())
 		return err
 	}
@@ -164,7 +164,7 @@ func (s ContactRepository) Delete(ctx context.Context, contactId int) error {
 	}
 
 	if count != 1 {
-		resErr := errors.New("contact delete rows counter not equals 1")
+		resErr := errcode.Wrap("delete contact", "row counter not equals 1")
 		s.logger.Error(resErr.Error())
 		return err
 	}
