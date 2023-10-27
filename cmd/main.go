@@ -14,21 +14,9 @@ import (
 	"time"
 )
 
-// @title Go + Gin + Swaggo
+// @title Hotel API
 // @version 1.0
-// @description Test
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name MIT
-// @license.url https://opensource.org/licenses/MIT
-
-// @host localhost:8080
-// @BasePath /
-// @query.collection.format multi
-
+// @description This is a sample hotel API
 func main() {
 	//ctx := context.Background()
 

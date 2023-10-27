@@ -8,12 +8,20 @@ import (
 	"time"
 )
 
-// @Summary create hotel
-// @ID create-hotel
-// @Produce json
-// @Success 200 {int} id
-// @Router /create_hotel [post]
+type ErrorResponse struct {
+	Error string `json:"error" example:"error"`
+}
 
+// @Summary Create a new hotel
+// @Description Create a new hotel with the input payload
+// @ID create-hotel
+// @Accept  json
+// @Produce  json
+// @Param   input body model.Hotel true "Hotel Payload"
+// @Success 200 {object} map[string]int "Successfully created hotel with ID"
+// @Failure 400 {object} ErrorResponse "Bad Request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /create_hotel [post]
 func (h *Handler) CreateHotel(c *gin.Context) {
 	var input model.Hotel
 
@@ -21,7 +29,6 @@ func (h *Handler) CreateHotel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error:": err.Error()})
 		return
 	}
-
 	ctx, _ := context.WithTimeout(context.Background(), time.Duration(1)*time.Second)
 
 	id, err := h.cases.Hotel.CreateHotel(ctx, input)

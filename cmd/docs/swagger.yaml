@@ -1,0 +1,68 @@
+definitions:
+  handler.ErrorResponse:
+    properties:
+      error:
+        example: error
+        type: string
+    type: object
+  model.Hotel:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      location_id:
+        type: integer
+      name:
+        type: string
+      number:
+        type: string
+      worker_id:
+        type: integer
+    required:
+    - description
+    - location_id
+    - name
+    - number
+    - worker_id
+    type: object
+info:
+  contact: {}
+  description: This is a sample hotel API
+  title: Hotel API
+  version: "1.0"
+paths:
+  /create_hotel:
+    post:
+      consumes:
+      - application/json
+      description: Create a new hotel with the input payload
+      operationId: create-hotel
+      parameters:
+      - description: Hotel Payload
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Hotel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created hotel with ID
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new hotel
+swagger: "2.0"
