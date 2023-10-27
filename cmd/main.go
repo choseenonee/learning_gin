@@ -1,9 +1,9 @@
 package main
 
 import (
-	"context"
-	"github.com/niumandzi/nto2022/gui"
+	"fmt"
 	"github.com/niumandzi/nto2022/internal/config"
+	"github.com/niumandzi/nto2022/internal/middleware"
 	contactRepository "github.com/niumandzi/nto2022/internal/repository/contact"
 	hotelRepository "github.com/niumandzi/nto2022/internal/repository/hotel"
 	"github.com/niumandzi/nto2022/internal/usecase"
@@ -14,8 +14,23 @@ import (
 	"time"
 )
 
+// @title Go + Gin + Swaggo
+// @version 1.0
+// @description Test
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /
+// @query.collection.format multi
+
 func main() {
-	ctx := context.Background()
+	//ctx := context.Background()
 
 	logging.Init()
 	logger := logging.GetLogger()
@@ -42,5 +57,12 @@ func main() {
 	hotel := hotelUsecase.NewHotelUsecase(hotelRepo, timeoutContext, logger)
 
 	cases := usecase.NewUsecases(contact, hotel)
-	gui.Index(ctx, cases)
+
+	r := middleware.NewClient(cases)
+
+	if err := r.Run(); err != nil {
+		fmt.Println("ERROR CLIENT")
+	}
+
+	//gui.Index(ctx, cases)
 }
